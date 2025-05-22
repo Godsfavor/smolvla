@@ -1,0 +1,11 @@
+# Ignore everything
+*
+
+# Un-ignore selected files/folders
+!.gitignore
+!quick_start_infer.py
+!quick_start.py
+!sbatch_script.sh
+!run_eval.sh
+!SmolVLM-Base-Fixed/
+!SmolVLM-Base-Fixed/**
