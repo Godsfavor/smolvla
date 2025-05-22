@@ -1,4 +1,4 @@
-###VLA Training with Bridge Data
+VLA Training with Bridge Data
 
 
 This repository contains code for training a Visual Language Action (VLA) model using the Bridge Data dataset. The model predicts robotic actions based on visual and language inputs, leveraging state-of-the-art transformer architectures like Idefics3 and SmolVLM with efficient fine-tuning techniques such as LoRA and QLoRA.
