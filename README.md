@@ -1,4 +1,6 @@
-VLA Training with Bridge Data
+###VLA Training with Bridge Data
+
+
 This repository contains code for training a Visual Language Action (VLA) model using the Bridge Data dataset. The model predicts robotic actions based on visual and language inputs, leveraging state-of-the-art transformer architectures like Idefics3 and SmolVLM with efficient fine-tuning techniques such as LoRA and QLoRA.
 Table of Contents
 
@@ -15,6 +17,8 @@ Contact
 Introduction
 This project aims to train a Visual Language Action (VLA) model to predict robotic actions based on visual observations (images) and language instructions. It uses the Bridge Data dataset, which contains 7,200 demonstrations of a WidowX250 robot arm performing 71 kitchen tasks across 10 environments with varying lighting, robot positions, and backgrounds. The model leverages transformer architectures (Idefics3 or SmolVLM) and employs efficient fine-tuning methods like LoRA and QLoRA to achieve generalization across tasks and domains. The training pipeline is built using PyTorch and the Hugging Face Transformers library, with data loaded from TFRecord files using TensorFlow.
 The project is inspired by approaches like OpenVLA, incorporating features such as freezing the vision encoder, mixed supervision with language embeddings, and options for discrete or continuous action prediction. The training process logs metrics and predictions to Weights & Biases (WandB) for monitoring and analysis.
+
+
 Prerequisites
 To run this project, you need the following:
 Software
@@ -40,22 +44,22 @@ WandB Account: For logging training metrics and visualizations
 Setup
 Follow these steps to set up the project environment:
 
-Clone the Repository:Clone the project from your GitHub repository (replace yourusername with your actual GitHub username).
-git clone https://github.com/yourusername/vla_training.git
-cd vla_training
+Clone the Repository: Clone the project from your GitHub repository (replace Godsfavor with your actual GitHub username).
+git clone https://github.com/Godsfavor/smolvla.git
+cd smolvla
 
 
-Create a Virtual Environment:Set up a Python virtual environment to isolate dependencies.
+Create a Virtual Environment: Set up a Python virtual environment to isolate dependencies.
 python -m venv env
 source env/bin/activate
 
 
-Install Dependencies:Upgrade pip and install the required Python packages.
+Install Dependencies: Upgrade pip and install the required Python packages.
 pip install --upgrade pip
 pip install torch torchvision torchaudio packaging wheel accelerate datasets peft bitsandbytes tensorboard flash-attn transformers tensorflow Pillow numpy wandb matplotlib
 
 
-Set Up WandB:The project uses Weights & Biases (WandB) for logging training progress and metrics. Create an account at WandB and obtain your API key.
+Set Up WandB: The project uses Weights & Biases (WandB) for logging training progress and metrics. Create an account at WandB and obtain your API key.
 export WANDB_API_KEY=your_api_key
 
 
@@ -64,11 +68,11 @@ Data Preparation
 The model is trained on the Bridge Data dataset, a large multi-domain and multi-task dataset containing 7,200 demonstrations of a WidowX250 robot arm performing 71 kitchen tasks across 10 environments. The dataset is stored in TFRecord format and must be placed in a specific directory structure for the code to access it.
 Steps to Prepare the Dataset
 
-Create the Directory Structure:Create the directory where the dataset will be stored, relative to the project root.
+Create the Directory Structure: Create the directory where the dataset will be stored, relative to the project root.
 mkdir -p data/datasets/bridge_release/data/tfds/bridge_dataset/1.0.0
 
 
-Download the Dataset:The dataset is available at Bridge Data. It consists of 1024 TFRecord files for the training split and 128 for the validation split. Download these files into the 1.0.0 directory.
+Download the Dataset: The dataset is available at Bridge Data. It consists of 1024 TFRecord files for the training split and 128 for the validation split. Download these files into the 1.0.0 directory.
 cd data/datasets/bridge_release/data/tfds/bridge_dataset/1.0.0
 wget -r -l1 -np -nH --cut-dirs=5 https://rail.eecs.berkeley.edu/datasets/bridge_release/data/tfds/bridge_dataset/
 
@@ -93,9 +97,12 @@ python -c "import tensorflow_datasets as tfds; tfds.load('bridge', download=True
 This downloads the dataset to ~/tensorflow_datasets/bridge/1.0.0/. However, the code expects files named bridge_dataset-<split>.tfrecord-<index>-of-<total>, while TFDS may use bridge-<split>.tfrecord-<index>-of-<total>. To use TFDS:
 
 Locate the downloaded files in ~/tensorflow_datasets/bridge/1.0.0/.
-Modify the create_tf_dataset function in train_vla.py to use the correct file pattern:file_pattern = f"{base_path}/{split}-{{:05d}}-of-0{num_files:04d}.tfrecord"
+
+Modify the create_tf_dataset function in train_vla.py to use the correct file pattern:
+file_pattern = f"{base_path}/{split}-{{:05d}}-of-0{num_files:04d}.tfrecord"
 
 Set base_path = os.path.expanduser('~/tensorflow_datasets/bridge/1.0.0/').
+
 
 Due to the hardcoded path in the provided code, manually downloading the TFRecord files is recommended for simplicity.
 Running the Code
@@ -212,14 +219,14 @@ Evaluation Metrics
 The model is evaluated using:
 
 Mean Absolute Error (MAE): Measures the average absolute difference between predicted and actual actions.
-Mean Squared Error (MSE): Measures the average squared difference, emphasizing larger errors.These metrics are computed during evaluation (every 100 steps) and logged to WandB. Lower values indicate better performance.
+Mean Squared Error (MSE): Measures the average squared difference, emphasizing larger errors. These metrics are computed during evaluation (every 100 steps) and logged to WandB. Lower values indicate better performance.
 
 WandB Logging
 The training process logs:
 
 Training loss and learning rate every 50 steps.
 Evaluation metrics (MAE, MSE) every 100 steps.
-Example predictions and target actions for validation examples.Access these logs on the WandB dashboard using your API key. The project is named smolvla-training, with run names like SmolVLM-Base-OpenVLA-style.
+Example predictions and target actions for validation examples. Access these logs on the WandB dashboard using your API key. The project is named smolvla-training, with run names like SmolVLM-Base-OpenVLA-style.
 
 Example Predictions
 After training, the script generates predictions for five validation examples, showing:
@@ -227,7 +234,7 @@ After training, the script generates predictions for five validation examples, s
 The language instruction.
 Predicted actions (as a 7-dimensional vector or discrete bin indices).
 Actual actions.
-Per-example error (mean absolute error).These are printed to the console and logged to WandB under final_eval/example_<i>_prediction.
+Per-example error (mean absolute error). These are printed to the console and logged to WandB under final_eval/example_<i>_prediction.
 
 Contributing
 Contributions are welcome! To contribute:
@@ -243,8 +250,8 @@ Test your changes locally or on a small subset of the dataset to ensure compatib
 
 License
 This project is licensed under the MIT License. See the LICENSE file for details.
-Contact
-For questions or issues, please contact [your email] or open an issue on GitHub.
+
+
 Key Citations
 
 Bridge Data Dataset: Source for the Bridge Data dataset used in training.
